@@ -87,4 +87,13 @@ object lists extends App {
 
   assert(isPalindrome(List(1,2,3,2,1)))
   assert(!isPalindrome(intList))
+
+  def flatten (l: List[_]): List[_] = l.flatMap {
+    case list: List[_] => flatten(list)
+    case other => List(other)
+  }
+
+  val f = flatten(List(1,2, List(3,4, List(5,6))))
+
+  assert(f == List(1,2,3,4,5,6))
 }
