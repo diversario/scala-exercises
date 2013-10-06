@@ -128,13 +128,32 @@ object lists extends App {
   assert(reverseBuiltIn(shortList) == List("a"))
 
 
-  def reverseManual [T](l: List[T]): List[T] = {
-    for (el <- l.reverse) yield el
+  def reverseRecursive (l: List[_]): List[_] = {
+    def reverseRec (ls: List[_]): List[_] = ls match {
+      case Nil => Nil
+      case h :: tail => reverseRecursive(tail) ::: List(h)
+    }
+
+    reverseRec(l)
   }
 
-  assert(reverseManual(intList) == List(5,4,3,2,1))
-  assert(reverseManual(strList) == List("d", "c", "b", "a"))
-  assert(reverseManual(shortList) == List("a"))
+  assert(reverseRecursive(intList) == List(5,4,3,2,1))
+  assert(reverseRecursive(strList) == List("d", "c", "b", "a"))
+  assert(reverseRecursive(shortList) == List("a"))
+
+
+  def reverseTailRecursive [_](l: List[_]): List[_] = {
+    def reverseRec (reversed: List[_], current: List[_]): List[_] = current match {
+      case Nil => reversed
+      case h :: tail => reverseRec(h :: reversed, tail)
+    }
+
+    reverseRec(Nil, l)
+  }
+
+  assert(reverseTailRecursive(intList) == List(5,4,3,2,1))
+  assert(reverseTailRecursive(strList) == List("d", "c", "b", "a"))
+  assert(reverseTailRecursive(shortList) == List("a"))
 
 
   // p06
