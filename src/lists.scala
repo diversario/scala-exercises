@@ -3,6 +3,7 @@ object lists extends App {
   val strList = List("a", "b", "c", "d")
   val shortList = List("a")
 
+
   def lastBuiltIn [T](l: List[T]): T = {
     l.last
   }
@@ -54,6 +55,28 @@ object lists extends App {
   }
 
 
+  def nthRecursive [T](n: Int, l: List[T]): T = {
+    def rec [T](count: Int, ls: List[T]): T = ls match {
+      case i if count == 0 => i.head
+      case _ :: el => rec(count - 1, ls.tail)
+      case Nil => throw new Error("No such element.")
+    }
+
+    rec(n, l)
+  }
+
+  assert(nthRecursive(2, intList) == 3)
+  assert(nthRecursive(0, strList) == "a")
+
+  try {
+    assert(nth(42, shortList) == "throw")
+  } catch {
+    case ex: Error => {
+      println(ex)
+    }
+  }
+
+
   def length [T](l: List[T]): Int = {
     l.length
   }
@@ -88,12 +111,18 @@ object lists extends App {
   assert(isPalindrome(List(1,2,3,2,1)))
   assert(!isPalindrome(intList))
 
+
   def flatten (l: List[_]): List[_] = l.flatMap {
     case list: List[_] => flatten(list)
     case other => List(other)
   }
 
-  val f = flatten(List(1,2, List(3,4, List(5,6))))
+  assert(flatten(List(1,2, List(3,4, List(5,6)))) == List(1,2,3,4,5,6))
 
-  assert(f == List(1,2,3,4,5,6))
+
+//  def compressList (l: List[_]): List[_] = {
+//    var last = l(0)
+//
+//
+//  }
 }
