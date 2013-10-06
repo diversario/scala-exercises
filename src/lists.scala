@@ -4,6 +4,7 @@ object lists extends App {
   val shortList = List("a")
 
 
+  // p01
   def lastBuiltIn [T](l: List[T]): T = {
     l.last
   }
@@ -25,6 +26,7 @@ object lists extends App {
   assert(lastManual(strList) == "d")
 
 
+  //p02
   def penultimate [T](l: List[T]): T = {
     var idx = l.length - 2
 
@@ -38,6 +40,7 @@ object lists extends App {
   assert(penultimate(shortList) == "a")
 
 
+  // p03
   def nth [T](n: Int, l: List[T]): T = {
     if (n > l.length-1 || n < 0) throw new Error("n is out of bounds")
     l(n)
@@ -56,10 +59,10 @@ object lists extends App {
 
 
   def nthRecursive [T](n: Int, l: List[T]): T = {
-    def rec [T](count: Int, ls: List[T]): T = ls match {
-      case i if count == 0 => i.head
-      case _ :: el => rec(count - 1, ls.tail)
-      case Nil => throw new Error("No such element.")
+    def rec (count: Int, ls: List[T]): T = (count, ls) match {
+      case (0, h :: _) => h
+      case (c, _ :: tail) => rec(count - 1, tail)
+      case (_, Nil) => throw new Error("No such element.")
     }
 
     rec(n, l)
@@ -69,7 +72,7 @@ object lists extends App {
   assert(nthRecursive(0, strList) == "a")
 
   try {
-    assert(nth(42, shortList) == "throw")
+    assert(nthRecursive(42, shortList) == "throw")
   } catch {
     case ex: Error => {
       println(ex)
@@ -77,6 +80,7 @@ object lists extends App {
   }
 
 
+  // p04
   def length [T](l: List[T]): Int = {
     l.length
   }
@@ -86,6 +90,35 @@ object lists extends App {
   assert(length(shortList) == 1)
 
 
+  def lengthRecursive [T](l: List[T]): Int = {
+    def len(ls: List[T]): Int = ls match {
+      case Nil => 0
+      case _ => 1 + len(ls.tail)
+    }
+
+    len(l)
+  }
+
+  assert(lengthRecursive(intList) == 5)
+  assert(lengthRecursive(strList) == 4)
+  assert(lengthRecursive(shortList) == 1)
+
+
+  def lengthTailRecursive [T](l: List[T]): Int = {
+    def len(acc: Int, ls: List[T]): Int = ls match {
+      case Nil => acc
+      case _ :: tail => len(acc + 1, tail)
+    }
+
+    len(0, l)
+  }
+
+  assert(lengthTailRecursive(intList) == 5)
+  assert(lengthTailRecursive(strList) == 4)
+  assert(lengthTailRecursive(shortList) == 1)
+
+
+  // p05
   def reverseBuiltIn [T](l: List[T]): List[T] = {
     l.reverse
   }
@@ -104,6 +137,7 @@ object lists extends App {
   assert(reverseManual(shortList) == List("a"))
 
 
+  // p06
   def isPalindrome [T](l: List[T]): Boolean = {
     l == l.reverse
   }
@@ -112,9 +146,14 @@ object lists extends App {
   assert(!isPalindrome(intList))
 
 
-  def flatten (l: List[_]): List[_] = l.flatMap {
-    case list: List[_] => flatten(list)
-    case other => List(other)
+  // p07
+  def flatten (l: List[_]): List[_] = {
+    def flat (l: List[_]): List[_] = l.flatMap {
+      case list: List[_] => flat(list)
+      case other => List(other)
+    }
+
+    flat(l)
   }
 
   assert(flatten(List(1,2, List(3,4, List(5,6)))) == List(1,2,3,4,5,6))
