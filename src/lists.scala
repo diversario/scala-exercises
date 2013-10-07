@@ -52,9 +52,7 @@ object lists extends App {
   try {
     assert(nth(42, shortList) == "throw")
   } catch {
-    case ex: Error => {
-      println(ex)
-    }
+    case ex: Error => {}
   }
 
 
@@ -74,9 +72,7 @@ object lists extends App {
   try {
     assert(nthRecursive(42, shortList) == "throw")
   } catch {
-    case ex: Error => {
-      println(ex)
-    }
+    case ex: Error => {}
   }
 
 
@@ -178,9 +174,17 @@ object lists extends App {
   assert(flatten(List(1,2, List(3,4, List(5,6)))) == List(1,2,3,4,5,6))
 
 
-//  def compressList (l: List[_]): List[_] = {
-//    var last = l(0)
-//
-//
-//  }
+  def compressList (l: List[_]): List[_] = {
+    def compress (result: List[_], ls: List[_]): List[_] = ls match {
+      case Nil => result
+      case h :: tail => {
+        if (result.length == 0 || result.last != h) compress(result :+ h, tail)
+        else compress(result, tail)
+      }
+    }
+
+    compress(Nil, l)
+  }
+
+  assert( compressList(List("a", "a", "b", "a", "c", "c", "c", "b")) == List("a", "b", "a", "c", "b") )
 }
