@@ -194,14 +194,14 @@ object lists extends App {
   def compressListIntoLists (l: List[_]): List[_] = {
     def compress (result: List[_], ls: List[_]): List[_] = ls match {
       case Nil => result
-      case h :: tail => compress(result :+ tail.takeWhile(_ == h) :+ h, tail.dropWhile(_ == h))
+      case h :: tail => compress(result :+ ls.takeWhile(_ == h), ls.dropWhile(_ == h))
     }
 
     compress(Nil, l)
   }
 
   assert(
-    compressList(List("a", "a", "b", "a", "c", "c", "c", "b")) ==
+    compressListIntoLists(List("a", "a", "b", "a", "c", "c", "c", "b")) ==
                  List(List("a", "a"), List("b"), List("a"), List("c", "c", "c"), List("b"))
   )
 }
