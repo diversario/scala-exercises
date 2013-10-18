@@ -204,4 +204,23 @@ object lists extends App {
     compressListIntoLists(List("a", "a", "b", "a", "c", "c", "c", "b")) ==
                  List(List("a", "a"), List("b"), List("a"), List("c", "c", "c"), List("b"))
   )
+
+
+  // p10
+  def RLE (l: List[_]): List[_] = {
+    def compress (result: List[_], ls: List[_]): List[_] = ls match {
+      case Nil => result
+      case h :: tail => {
+        val (span, tail) = ls span (_ == h)
+        compress(result :+ (span.length, h), tail)
+      }
+    }
+
+    compress(Nil, l)
+  }
+
+  assert(
+    RLE(List("a", "a", "b", "c", "c", "c")) ==
+    List((2,"a"), (1,"b"), (3,"c"))
+  )
 }
