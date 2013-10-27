@@ -223,4 +223,24 @@ object lists extends App {
     RLE(List("a", "a", "b", "c", "c", "c")) ==
     List((2,"a"), (1,"b"), (3,"c"))
   )
+
+  // p11
+  def RLEmodified (l: List[_]): List[_] = {
+    def compress (result: List[_], ls: List[_]): List[_] = ls match {
+      case Nil => result
+      case h :: tail => {
+        val (span, tail) = ls span (_ == h)
+
+        if (span.length == 1) compress(result :+ h, tail)
+        else compress(result :+ (span.length, h), tail)
+      }
+    }
+
+    compress(Nil, l)
+  }
+
+  assert(
+    RLEmodified(List("a", "a", "b", "c", "c", "c", "d")) ==
+      List((2,"a"), "b", (3,"c"), "d")
+  )
 }
